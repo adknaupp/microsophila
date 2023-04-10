@@ -1,5 +1,9 @@
 # see also: offical docs: https://bowtie-bio.sourceforge.net/bowtie2/index.shtml
+
+DEBUG_PFX="setup_bowtie2.sh:"
+
 # download pre-built binaries
+echo "$DEBUG_PFX Downloading pre-built binaries..."
 wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.5.1/bowtie2-2.5.1-linux-x86_64.zip/download
 
 # extract pre-built binaries
@@ -13,13 +17,15 @@ mv $name_to_replace bowtie2
 
 # remove .zip file
 rm download
+echo "$DEBUG_PFX Downloaded pre-built binaries."
 
 # set up reference sequence
+echo "$DEBUG_PFX Creating reference directories..."
 mkdir "$MICROSOPHILA_STORAGE_PATH/ref"
 dm_ref_path="$MICROSOPHILA_STORAGE_PATH/ref/d_melanogaster"
 mkdir "$dm_ref_path"
+echo "$DEBUG_PFX Created reference directories."
 
-# download
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz > "$dm_ref_path/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz"
 gunzip "$dm_ref_path/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz"
 

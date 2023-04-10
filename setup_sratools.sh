@@ -1,5 +1,8 @@
 # see also: instructions found at https://github.com/ncbi/sra-tools/wiki/02.-Installing-SRA-Toolkit
 # download pre-built binaries from NCBI
+DEBUG_PFX="SETUP_SRATOOLS:"
+
+echo "$DEBUG_PFX Installing SRAToolkit..."
 wget --output-document sratoolkit.tar.gz https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/current/sratoolkit.current-ubuntu64.tar.gz
 
 # extract pre-built binaries
@@ -8,6 +11,7 @@ tar vxzf sratoolkit.tar.gz
 name_to_replace=$(tar tf sratoolkit.tar.gz | head -1)
 mv $name_to_replace sratoolkit
 rm sratoolkit.tar.gz
+echo "$DEBUG_PFX SRAToolkit installed."
 
 # optional:
 # test that binaries work on your system and that the download and extraction were successful:

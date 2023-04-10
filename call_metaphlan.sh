@@ -5,12 +5,13 @@
 #SBATCH --nodes=1   # number of nodes
 #SBATCH --mem-per-cpu=4GB # memory per CPU core
 
+DEBUG_PFX="call_metaphlan.sh"
+
 # pass accession name as arg ...
 accession_name="$1"
 if [[ -z $1 ]]; then
-  accession_name="SRR1525774" # <<< or hard-code name here
-  read -p "No accession name was provided, would you like to use $accession_name as input? (y/n)" $yn
-  [[ $yn -ne "y" ]] && exit 1
+  echo "USAGE ERROR: $DEBUG_PREFIX This script requires an accession number as its first argument, but none was provided."
+  exit 1
 fi
 
 database_folder="$MICROSOPHILA_STORAGE_PATH/metaphlan_database"
@@ -24,9 +25,9 @@ unpaired="$accession_path/microbiome/microbiome_reads.fastq"
 microbiome_files="$paired_1,$paired_2,$unpaired"
 
 # check that input files exist
-[[ ! -f "$paired_1" ]] && echo "Missing input file ${paired_1}." && exit 1
-[[ ! -f "$paired_2" ]] && echo "Missing input file ${paired_2}." && exit 1
-[[ ! -f "$unpaired" ]] && echo "Missing input file ${unpaired}." && exit 1
+[[ ! -f "$paired_1" ]] && echo "$DEBUG_PFX Missing input file ${paired_1}." && exit 1
+[[ ! -f "$paired_2" ]] && echo "$DEBUG_PFX Missing input file ${paired_2}." && exit 1
+[[ ! -f "$unpaired" ]] && echo "$DEBUG_PFX Missing input file ${unpaired}." && exit 1
 
 # somewhere to put bowtie2 output
 if [[ ! -d "$accession_path/metaphlan" ]]; then
@@ -48,6 +49,6 @@ source "$MICROSOPHILA_INSTALL_PATH/metaphlan_env/bin/activate"
 # clean up if metaphlan fails
 exit_code=$?
 if [[ $exit_code -ne 0 ]]; then
-  echo "Non-zero exit status! Exit code: $exit_code."
+  echo "$DEBUG_PFX MetaPhlan exited with a non-zero exit code of: $exit_code."
   rm "$accession_path/metaphlan/bowtie2_output.bz2"
 fi

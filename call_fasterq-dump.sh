@@ -5,12 +5,16 @@
 #SBATCH --nodes=1   # number of nodes
 #SBATCH --mem-per-cpu=6GB # memory per CPU core
 
+DEBUG_PFX="call_fasterq_dump.sh:"
+
 # pass accession name as arg ...
 accession_name="$1"
 if [[ -z $1 ]]; then
-  accession_name="SRR1525774" # <<< or hard-code name here
-  read -p "No accession name was provided, would you like to use $accession_name as input? (y/n)" $yn
-  [[ $yn -ne "y" ]] && exit 1
+  echo "USAGE ERROR: $DEBUG_PFX requires an accession number as its primary argument, but no accession number was provided."
+  echo "$DEBUG_PFX Accessions must be prefetched and stored in the storage folder."
+  echo "$DEBUG_PFX The current storage path is \"$MICROSOPHILA_STORAGE_PATH\"."
+  echo "$DEBUG_PFX The expected storage folder path is \"$MICROSOPHILA_STORAGE_PATH/[accession number]\"."
+  exit 1
 fi
 
 accession_path="$MICROSOPHILA_STORAGE_PATH/$accession_name"
