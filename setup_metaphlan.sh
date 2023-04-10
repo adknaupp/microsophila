@@ -17,7 +17,7 @@ python -m venv "$MICROSOPHILA_INSTALL_PATH/metaphlan_env"
 source "$MICROSOPHILA_INSTALL_PATH/metaphlan_env/bin/activate"
 
 # upgrade pip
-pip install --upgrade
+pip install --upgrade pip
 
 # install dependencies
 pip install numpy biopython
