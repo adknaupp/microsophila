@@ -25,6 +25,7 @@ pip install --upgrade pip
 # install dependencies
 echo "$DEBUG_PFX Installing dependencies..."
 pip install numpy biopython
+pip install matplotlib
 
 # optional: visually confirm installed python packages:
 # pip freeze # should see numpy and biopython

@@ -1,11 +1,13 @@
 inputs = ['linvilla_fall.txt', 'linvilla_frost.txt', 'linvilla_spring.txt']
 outputs = ['linvillafalloutput.txt', 'linvillafrostoutput.txt', 'linvillaspringoutput.txt']
+input_dir= 'test'
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 allFiles = []
 for iputs in inputs:
+    iputs = input_dir + '/' + iputs
     with open(iputs, 'r') as fp:
         lines = fp.readlines()
         stripped = []
