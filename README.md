@@ -1,8 +1,10 @@
 # microsophila
 
-Microsophila pipeline.
+# How does this pipeline work?
 
-# getting started
+This pipeline uses SRATools to pull reads from NCBI. It then uses Bowtie2 to filter out host contamination from these reads. After the filtering, it uses MetaPhlAn to identify the origin of the reads. The pipeline also includes python scripts that turn MetaPhlAn's output into readable graphs. 
+
+# Getting started:
 
 ## Step 0: pick environment and set environment variables
 
@@ -22,7 +24,7 @@ git clone https://github.com/adknaupp/microsophila.git
 
 ## Step 2: run script "microsophila_install.sh"
 
-The install script checks that you have exported the variables from step 1 before proceeding to install sratools, bowtie2, and MetaPhlAn (as well as the respective dependencies of each).
+The install script checks that you have exported the variables from step 1 before proceeding to install sratools, bowtie2, and MetaPhlAn (as well as the respective dependencies of each). This script may take upwards of 90 minutes to run.
 
 ## Common errors:
 
@@ -37,3 +39,26 @@ This is caused by an error with pip, which appears to be a versioning error. Be 
 ## Step 3: run script "create_dummy_accession.sh"
 
 To avoid having to generate real data, this script creates a child directory of $MICROSOPHILA_STORAGE_PATH to use for testing. So far, it contains some empty directories and a MetaPhlAn profile file.
+
+# Using the Pipeline
+
+## Main Pipeline
+
+The main script is "microsophila_pipeline.sh", which accepts a single argument: the accession number. You must give microsophila_pipeline.sh a valid NCBI accession number, which typically begins with "SRR". An example accession is SRR1525774.
+
+ex: "bash microsophila_pipeline.sh SRR1525774"
+
+Running the full pipeline may take several hours. The pipeline has several stages:
+* First, it download the reads for the accession, and stores them in the storage folder specified in the ~/.bashrc. These files are stored as a prefetch.
+* Second, it calls fasterq-dump on the prefetch files, turning them into fastq files.
+* Third, it calls Bowtie2 to remove host contamination from those reads.
+* Finally, it calls MetaPhlAn on the filtered reads to determine their species.
+
+## Generating the Graph
+
+The main script for generating the graph is figure_2.py. Currently, figure_2.py operates using the sample MetaPhlAn outputs stored in the "test" directory as its inputs, although it can be run on any valid output file (or files) from MetaPhlAn. figure_2.py current generates two things:
+
+* Data about the relative species composition of the reads
+* A graph displaying that information.
+
+figure_2.py currently does not accept arguments. To run it, simply use "python figure_2.py", which will generate the data files and put them in the local directory. To see the graphs, we recommend running the program in a Jupyter notebook or other IDE. Note that figure_2.py requires both matplotlib and numpy. The pipeline process should automatically install both, but if figure_2.py is moved to a new environment, be sure both dependencies are properly set up.
