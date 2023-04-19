@@ -5,13 +5,16 @@
 #SBATCH --nodes=1   # number of nodes
 #SBATCH --mem-per-cpu=1GB # memory per CPU core
 
+DEBUG_PFX="call_bowtie2.sh:"
+
 # pass accession name as arg ...
 accession_name="$1"
 if [[ -z $1 ]]; then
-  accession_name="SRR1525774" # <<< or hard-code name here
-  read -p "No accession name was provided, would you like to use $accession_name as input? (y/n)" $yn
-  [[ $yn -ne "y" ]] && exit 1
+  echo "USAGE ERROR: $DEBUG_PFX Requires an accession number as its primary argument, but no accession number was provided."
+  exit 1
 fi
+
+echo "$DEBUG_PFX running with accession number: $accession_name"
 
 bowtie_bin_path="$MICROSOPHILA_INSTALL_PATH/bowtie2"
 input_path="$MICROSOPHILA_STORAGE_PATH/$accession_name/with_host"
@@ -38,5 +41,6 @@ fi
 
 # if successful, copy bowtie2 output to output directory
 if [[ $? -eq 0 && -n $SLURM_JOB_ID ]]; then
+  echo "$DEBUG_PFX Success, copying output to $output_path"
   cp slurm-${SLURM_JOB_ID}.out "$output_path/alignment_stats.txt"
 fi

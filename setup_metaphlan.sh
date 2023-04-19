@@ -1,4 +1,5 @@
 #!/bin/bash
+DEBUG_PFX="setup_metaphlan.sh:"
 
 # use sufficient python version:
 # TODO: make this step system-agnostic
@@ -13,11 +14,18 @@ if [[ ! $version =~ "Python 3.8" ]]; then
 fi
 
 # create and activate virtual env
+echo "$DEBUG_PFX Creating virtual environment..."
 python -m venv "$MICROSOPHILA_INSTALL_PATH/metaphlan_env"
 source "$MICROSOPHILA_INSTALL_PATH/metaphlan_env/bin/activate"
+echo "$DEBUG_PFX Created virtual environment."
+
+# upgrade pip
+pip install --upgrade pip
 
 # install dependencies
+echo "$DEBUG_PFX Installing dependencies..."
 pip install numpy biopython
+pip install matplotlib
 
 # optional: visually confirm installed python packages:
 # pip freeze # should see numpy and biopython
@@ -34,6 +42,7 @@ if [[ ! "$PATH" =~ "bowtie2" ]]; then
 fi
 
 # install metaphlan
+echo "$DEBUG_PFX Installing MetaPhlan (this will take some time!)..."
 pip install metaphlan # this install will install many additional packages...
 
 # download and build database. This is the step which requires bowtie2
@@ -46,5 +55,7 @@ pip install metaphlan # this install will install many additional packages...
 # database files, and running "metaphlan --install" a second time. This
 # time, the .pkl file did appear. I presume it is an output of bowtie2
 # (perhaps bowtie2-build?).
+echo "$DEBUG_PFX Downloading and building database..."
 mkdir "$MICROSOPHILA_STORAGE_PATH/metaphlan_database"
 metaphlan --install --bowtie2db "$MICROSOPHILA_STORAGE_PATH/metaphlan_database"
+echo "$DEBUG_PFX Metaphlan installed."
