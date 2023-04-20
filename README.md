@@ -28,13 +28,17 @@ The install script checks that you have exported the variables from step 1 befor
 
 ## Common errors:
 
-### Permission denied for "setup_filename.sh":
+### Permission denied for `setup_filename.sh`:
 
 If this error pops up during the execution of microsophila_install.sh, then the bash script doesn't have the appropriate permissions to execute the other bash scripts it's calling. Execute "chmod 755 setup_filename.sh" on each file that had its permission denied.
 
-### Failed to build numpy / ERROR: Could not build wheels for numpy which use PEP 517 and cannot be installed directly
+### Failed to build `numpy` / ERROR: Could not build wheels for `numpy` which use PEP 517 and cannot be installed directly
 
 This is caused by an error with pip, which appears to be a versioning error. Be sure that your pip version is up to date and that your virtual environment started properly. If the error persists, run `pip install --upgrade pip`.
+
+### `setup_bowtie2.sh` fails with `bowtie2-build: command not found`
+
+This is generally caused when the `$PATH` variable is not correctly set to the directory where Bowtie2 is stored. Check to be sure that the `$PATH` variable in your `.bashrc` is correctly set and that you have run `source ~/.bashrc`.
 
 ## Step 3: run `create_dummy_accession.sh`
 
