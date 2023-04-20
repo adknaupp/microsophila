@@ -2,6 +2,8 @@
 
 DEBUG_PFX="setup_bowtie2.sh:"
 
+BOWTIE_PATH="$MICROSOPHILA_INSTALL_PATH"
+
 # download pre-built binaries
 echo "$DEBUG_PFX Downloading pre-built binaries..."
 wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.5.1/bowtie2-2.5.1-linux-x86_64.zip/download
@@ -13,21 +15,28 @@ unzip download
 name_to_replace=$(unzip -l download | head -4 | tail -1 | awk '{print $4}')
 
 # rename package to bowtie2
-mv $name_to_replace bowtie2
+mv $name_to_replace ${BOWTIE_PATH}/bowtie2
 
 # remove .zip file
 rm download
 echo "$DEBUG_PFX Downloaded pre-built binaries."
 
-# set up reference sequence
 echo "$DEBUG_PFX Creating reference directories..."
 mkdir "$MICROSOPHILA_STORAGE_PATH/ref"
-dm_ref_path="$MICROSOPHILA_STORAGE_PATH/ref/d_melanogaster"
-mkdir "$dm_ref_path"
+DM_REF_PATH="$MICROSOPHILA_STORAGE_PATH/ref/d_melanogaster"
+mkdir "$DM_REF_PATH"
 echo "$DEBUG_PFX Created reference directories."
 
-wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz > "$dm_ref_path/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz"
-gunzip "$dm_ref_path/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz"
+echo "$DEBUG_PFX Fetching references..."
+wget --directory-prefix=${DM_REF_PATH} https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/215/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz
 
-# build index
-bowtie2-build -f "$dm_ref_path/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna" "$dm_ref_path/bt2_index"
+echo "$DEBUG_PFX Unzipping references..."
+gunzip "$DM_REF_PATH/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz"
+
+echo "$DEBUG_PFX Removing .gz file..."
+rm GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna.gz
+
+echo "$DEBUG_PFX Building index..."
+bowtie2-build -f "$DM_REF_PATH/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna" "$DM_REF_PATH/bt2_index"
+
+echo "$DEBUG_PFX Done."

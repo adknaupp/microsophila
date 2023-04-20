@@ -7,11 +7,13 @@ wget --output-document sratoolkit.tar.gz https://ftp-trace.ncbi.nlm.nih.gov/sra/
 
 # extract pre-built binaries
 tar vxzf sratoolkit.tar.gz
+
 # get the name of the directory that was just extracted (e.g. sratoolkit.3.0.1-ubuntu64)
 name_to_replace=$(tar tf sratoolkit.tar.gz | head -1)
-mv $name_to_replace sratoolkit
+# mkdir -p ${MICROSOPHILA_INSTALL_PATH}/sratoolkit
+mv $name_to_replace ${MICROSOPHILA_INSTALL_PATH}/sratoolkit
 rm sratoolkit.tar.gz
-echo "$DEBUG_PFX SRAToolkit installed."
+echo "$DEBUG_PFX Done."
 
 # optional:
 # test that binaries work on your system and that the download and extraction were successful:
