@@ -2,16 +2,14 @@
 
 DEBUG_PFX="setup_quast.sh:"
 
-cd $MICROSOPHILA_STORAGE_PATH
-echo"$DEBUG_PFX Moving to storage path... $MICROSOPHILA_STORAGE_PATH"
+# create and activate virtual env
+echo "$DEBUG_PFX Creating virtual environment..."
+python -m venv "$MICROSOPHILA_INSTALL_PATH/metaphlan_env"
+source "$MICROSOPHILA_INSTALL_PATH/metaphlan_env/bin/activate"
+echo "$DEBUG_PFX Created virtual environment."
 
-# Download QUAST source code tarball
-wget https://github.com/ablab/quast/releases/download/quast_5.2.0/quast-5.2.0.tar.gz
-echo "${DEBUG_PFX} Downloaded QUAST tarball."
+# upgrade pip
+echo "$DEBUG_PFX Installing QUAST via PIP..."
+pip install quast
 
-# Extract from tarball
-tar -xzf quast-5.2.0.tar.gz
-echo "${DEBUG_PFX} Extracted QUAST tarball."
-
-rm quast-5.2.0.tar.gz
-echo "${DEBUG_PFX} Removed QUAST tarball."
+echo "$DEBUG_PFX done."
